@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja Estilo - Moda Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .oculto {
+            display: none !important;
+        }
+
+        /* ===== TOPO ===== */
+        .topo {
+            background: #e91e63;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            flex-wrap: wrap;
+            gap: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topo h1 {
+            font-size: 22px;
+        }
+
+        .topo .acoes {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .topo button {
+            background: white;
+            color: #e91e63;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .topo button:hover {
+            background: #fce4ec;
+        }
+
+        /* ===== AUTH ===== */
+        .container-auth {
+            max-width: 420px;
+            margin: 60px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .container-auth h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #e91e63;
+        }
+
+        .container-auth input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .container-auth input:focus {
+            outline: none;
+            border-color: #e91e63;
+        }
+
+        .container-auth .btn-principal {
+            width: 100%;
+            padding: 12px;
+            background: #e91e63;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .container-auth .btn-principal:hover {
+            background: #c2185b;
+        }
+
+        .container-auth .link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .container-auth .link a {
+            color: #e91e63;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .tipo-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tipo-btn {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            transition: .2s;
+        }
+
+        .tipo-btn.active {
+            border-color: #e91e63;
+            background: #fce4ec;
+            color: #e91e63;
+        }
+
+        #mensagem,
+        #msg-cadastro {
+            text-align: center;
+            margin-top: 12px;
+            color: #e91e63;
+            font-size: 14px;
+        }
+
+        /* ===== FILTROS ===== */
+        .filtros {
+            display: flex;
+            gap: 10px;
+            padding: 20px 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .filtros input,
+        .filtros select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .filtros input:focus,
+        .filtros select:focus {
+            outline: none;
+            border-color: #e91e63;
+        }
+
+        .filtros input[type="text"] {
+            flex: 1;
+            max-width: 300px;
+        }
+
+        /* ===== LOJA ===== */
+        .grid-produtos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .card-produto {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            transition: .2s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .card-produto:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-produto .badge-categoria {
+            position: absolute;
+            top: 22px;
+            left: 22px;
+            background: #e91e63;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .card-produto img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #eee;
+        }
+
+        .card-produto h3 {
+            margin: 12px 0 6px;
+            font-size: 16px;
+        }
+
+        .card-produto p.desc {
+            font-size: 13px;
+            color: #888;
+            flex: 1;
+            min-height: 35px;
+        }
+
+        .card-produto .preco {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e91e63;
+            margin: 10px 0;
+        }
+
+        .card-produto .estoque-info {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .card-produto .controles {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .card-produto .controles button {
+            background: #e91e63;
+            color: white;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .card-produto .controles button:hover {
+            background: #c2185b;
+        }
+
+        .card-produto .controles button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .card-produto .controles input {
+            flex: 1;
+            text-align: center;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            min-width: 0;
+        }
+
+        .card-produto .btn-add {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .card-produto .btn-add:hover {
+            background: #c2185b;
+        }
+
+        /* ===== ADMIN ===== */
+        .admin-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .admin-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .admin-section h2 {
+            color: #e91e63;
+            margin-bottom: 18px;
+            font-size: 20px;
+        }
+
+        .admin-section input {
+            width: 100%;
+            padding: 10px;
+            margin: 6px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .admin-section button {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .admin-section button:hover {
+            background: #c2185b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        td button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        td .btn-edit {
+            background: #2196f3;
+            color: white;
+        }
+
+        td .btn-del {
+            background: #f44336;
+            color: white;
+        }
+
+        /* ===== MODAL CARRINHO ===== */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            color: #e91e63;
+            margin-bottom: 15px;
+        }
+
+        .item-carrinho {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-carrinho img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .item-carrinho .info {
+            flex: 1;
+        }
+
+        .item-carrinho .info strong {
+            font-size: 14px;
+        }
+
+        .item-carrinho .info small {
+            color: #888;
+            font-size: 12px;
+            display: block;
+        }
+
+        .item-carrinho .controles-carrinho {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .item-carrinho .controles-carrinho button {
+            background: #e91e63;
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .item-carrinho .controles-carrinho button:hover {
+            background: #c2185b;
+        }
+
+        .item-carrinho .controles-carrinho span {
+            min-width: 25px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .item-carrinho .subtotal {
+            font-weight: bold;
+            color: #e91e63;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .item-carrinho .btn-remover {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .resumo-carrinho {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            font-weight: bold;
+            color: #c2185b;
+        }
+
+        .modal-content .fechar {
+            background: #666;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .modal-content .finalizar {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .modal-content .finalizar:hover {
+            background: #c2185b;
+        }
+
+        /* ===== TOAST (aviso) ===== */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            font-weight: bold;
+            animation: slideIn .3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============ TELA DE LOGIN ============ -->
+    <div id="tela-login" class="container-auth">
+        <h2>🛍️ Loja Estilo</h2>
+        <div class="tipo-selector">
+            <button class="tipo-btn active" data-tipo="cliente">👕 Cliente</button>
+            <button class="tipo-btn" data-tipo="admin">🔧 Admin</button>
+        </div>
+        <input type="email" id="login-email" placeholder="Email">
+        <input type="password" id="login-senha" placeholder="Senha">
+        <button class="btn-principal" onclick="fazerLogin()">Entrar</button>
+        <div class="link">
+            Não tem conta? <a onclick="mostrarCadastro()">Cadastre-se</a>
+        </div>
+        <div id="mensagem"></div>
+    </div>
+
+    <!-- ============ TELA DE CADASTRO ============ -->
+    <div id="tela-cadastro" class="container-auth oculto">
+        <h2>Criar Conta</h2>
+        <input type="text" id="cad-nome" placeholder="Nome completo">
+        <input type="email" id="cad-email" placeholder="Email">
+        <input type="password" id="cad-senha" placeholder="Senha (mín. 6 caracteres)">
+        <button class="btn-principal" onclick="fazerCadastro()">Cadastrar</button>
+        <div class="link">
+            Já tem conta? <a onclick="mostrarLogin()">Entrar</a>
+        </div>
+        <div id="msg-cadastro"></div>
+    </div>
+
+    <!-- ============ TELA DA LOJA (CLIENTE) ============ -->
+    <div id="tela-loja" class="oculto">
+        <div class="topo">
+            <h1>👕 Loja Estilo</h1>
+            <div class="acoes">
+                <span id="nome-usuario"></span>
+                <button onclick="abrirCarrinho()">🛒 Carrinho (<span id="qtd-carrinho">0</span>)</button>
+                <button onclick="logout()">Sair</button>
+            </div>
+        </div>
+
+        <div class="filtros">
+            <input type="text" id="busca" placeholder="🔍 Buscar produto..." oninput="renderizarLoja()">
+            <select id="filtro-categoria" onchange="renderizarLoja()">
+                <option value="">Todas as categorias</option>
+            </select>
+            <select id="filtro-ordem" onchange="renderizarLoja()">
+                <option value="padrao">Ordenar por: Padrão</option>
+                <option value="menor">Menor preço</option>
+                <option value="maior">Maior preço</option>
+                <option value="nome">Nome (A-Z)</option>
+            </select>
+        </div>
+
+        <div id="produtos-loja" class="grid-produtos"></div>
+    </div>
+
+    <!-- ============ TELA ADMIN ============ -->
+    <div id="tela-admin" class="oculto">
+        <div class="topo">
+            <h1>🔧 Painel Administrativo</h1>
+            <div class="acoes">
+                <span id="nome-admin"></span>
+                <button onclick="logout()">Sair</button>
+            </div>
+        </div>
+
+        <div class="admin-container">
+            <div class="admin-section">
+                <h2>➕ Cadastrar Novo Produto</h2>
+                <input type="text" id="prod-nome" placeholder="Nome do produto">
+                <input type="text" id="prod-desc" placeholder="Descrição">
+                <input type="number" id="prod-preco" placeholder="Preço (ex: 79.90)" step="0.01">
+                <input type="number" id="prod-estoque" placeholder="Estoque">
+                <input type="text" id="prod-categoria" placeholder="Categoria (ex: camiseta)">
+                <input type="url" id="prod-imagem" placeholder="URL da imagem (opcional)">
+                <button onclick="cadastrarProduto()">Cadastrar Produto</button>
+            </div>
+
+            <div class="admin-section">
+                <h2>📦 Produtos Cadastrados</h2>
+                <table id="tabela-produtos">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Preço</th>
+                            <th>Estoque</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="admin-section">
+                <h2>👥 Usuários Cadastrados</h2>
+                <table id="tabela-usuarios">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="admin-section">
+                <h2>🧾 Pedidos Realizados</h2>
+                <table id="tabela-pedidos">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Cliente</th>
+                            <th>Itens</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* =========================================================
+           "BANCO DE DADOS" no LocalStorage
+           ========================================================= */
+        const DB = {
+            get: (chave) => JSON.parse(localStorage.getItem(chave) || '[]'),
+            set: (chave, valor) => localStorage.setItem(chave, JSON.stringify(valor))
+        };
+
+        // Inicializa usuários
+        if (!localStorage.getItem('usuarios')) {
+            DB.set('usuarios', [
+                { id: 1, nome: 'Administrador', email: 'admin@loja.com', senha: 'admin123', tipo: 'admin' }
+            ]);
+        }
+
+        // ==================== CATÁLOGO COMPLETO DE ROUPAS ====================
+        if (!localStorage.getItem('produtos')) {
+            DB.set('produtos', [
+                // ===== CAMISETAS =====
+                { id: 1, nome: 'Camiseta Básica Branca', descricao: 'Algodão 100% penteado', preco: 49.90, estoque: 50, categoria: 'Camiseta', imagem: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400' },
+                { id: 2, nome: 'Camiseta Preta Estampada', descricao: 'Estampa exclusiva', preco: 59.90, estoque: 40, categoria: 'Camiseta', imagem: 'https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=400' },
+                { id: 3, nome: 'Camiseta Polo Azul', descricao: 'Piquet de algodão', preco: 89.90, estoque: 30, categoria: 'Camiseta', imagem: 'https://images.unsplash.com/photo-1626497764746-6dc36546b388?w=400' },
+                { id: 4, nome: 'Camiseta Oversized Cinza', descricao: 'Corte moderno', preco: 69.90, estoque: 25, categoria: 'Camiseta', imagem: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400' },
+
+                // ===== CALÇAS =====
+                { id: 5, nome: 'Calça Jeans Slim', descricao: 'Modelo slim fit', preco: 149.90, estoque: 35, categoria: 'Calça', imagem: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=400' },
+                { id: 6, nome: 'Calça Jeans Skinny', descricao: 'Corte justo', preco: 159.90, estoque: 20, categoria: 'Calça', imagem: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400' },
+                { id: 7, nome: 'Calça Cargo Bege', descricao: 'Bolsos laterais', preco: 179.90, estoque: 15, categoria: 'Calça', imagem: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400' },
+                { id: 8, nome: 'Calça Social Preta', descricao: 'Alfaiataria', preco: 199.90, estoque: 18, categoria: 'Calça', imagem: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400' },
+
+                // ===== JAQUETAS =====
+                { id: 9, nome: 'Jaqueta de Couro', descricao: 'Estilo clássico', preco: 299.90, estoque: 10, categoria: 'Jaqueta', imagem: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400' },
+                { id: 10, nome: 'Jaqueta Jeans', descricao: 'Lavagem média', preco: 219.90, estoque: 22, categoria: 'Jaqueta', imagem: 'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?w=400' },
+                { id: 11, nome: 'Jaqueta Bomber', descricao: 'Tecido impermeável', preco: 249.90, estoque: 12, categoria: 'Jaqueta', imagem: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400' },
+
+                // ===== VESTIDOS =====
+                { id: 12, nome: 'Vestido Floral', descricao: 'Tecido leve de verão', preco: 129.90, estoque: 20, categoria: 'Vestido', imagem: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400' },
+                { id: 13, nome: 'Vestido Longo Preto', descricao: 'Elegante para festas', preco: 259.90, estoque: 10, categoria: 'Vestido', imagem: 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=400' },
+                { id: 14, nome: 'Vestido Midi Branco', descricao: 'Estilo casual chic', preco: 179.90, estoque: 15, categoria: 'Vestido', imagem: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=400' },
+
+                // ===== BLUSAS =====
+                { id: 15, nome: 'Blusa Cropped Rosa', descricao: 'Tendência do verão', preco: 69.90, estoque: 30, categoria: 'Blusa', imagem: 'https://images.unsplash.com/photo-1564257577918-9c9c2e3b93a5?w=400' },
+                { id: 16, nome: 'Blusa de Seda', descricao: 'Toque suave', preco: 139.90, estoque: 18, categoria: 'Blusa', imagem: 'https://images.unsplash.com/photo-1564257577918-9c9c2e3b93a5?w=400' },
+                { id: 17, nome: 'Moletom Canguru', descricao: 'Interior felpudo', preco: 159.90, estoque: 25, categoria: 'Blusa', imagem: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400' },
+
+                // ===== BERMUDAS E SHORTS =====
+                { id: 18, nome: 'Bermuda Jeans', descricao: 'Corte reto', preco: 99.90, estoque: 28, categoria: 'Bermuda', imagem: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400' },
+                { id: 19, nome: 'Short Praia Floral', descricao: 'Tecido leve', preco: 59.90, estoque: 40, categoria: 'Bermuda', imagem: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400' },
+                { id: 20, nome: 'Bermuda Sarja Bege', descricao: 'Casual e confortável', preco: 119.90, estoque: 20, categoria: 'Bermuda', imagem: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400' },
+
+                // ===== ACESSÓRIOS =====
+                { id: 21, nome: 'Boné Aba Curva', descricao: 'Ajustável', preco: 49.90, estoque: 35, categoria: 'Acessório', imagem: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400' },
+                { id: 22, nome: 'Cinto de Couro', descricao: 'Fivela metálica', preco: 79.90, estoque: 25, categoria: 'Acessório', imagem: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400' },
+                { id: 23, nome: 'Cachecol de Lã', descricao: 'Inverno quentinho', preco: 89.90, estoque: 20, categoria: 'Acessório', imagem: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=400' },
+                { id: 24, nome: 'Meias Kit 3 Pares', descricao: 'Algodão premium', preco: 39.90, estoque: 60, categoria: 'Acessório', imagem: 'https://images.unsplash.com/photo-1582966772680-860e372bb558?w=400' }
+            ]);
+        }
+
+        // Carrinho: {id, quantidade}
+        if (!localStorage.getItem('carrinho')) DB.set('carrinho', []);
+        if (!localStorage.getItem('pedidos')) DB.set('pedidos', []);
+
+        /* =========================================================
+           NAVEGAÇÃO
+           ========================================================= */
+        let tipoSelecionado = 'cliente';
+
+        function esconderTudo() {
+            ['tela-login', 'tela-cadastro', 'tela-loja', 'tela-admin'].forEach(id => {
+                document.getElementById(id).classList.add('oculto');
+            });
+        }
+        function mostrarLogin() { esconderTudo(); document.getElementById('tela-login').classList.remove('oculto'); }
+        function mostrarCadastro() { esconderTudo(); document.getElementById('tela-cadastro').classList.remove('oculto'); }
+
+        document.querySelectorAll('.tipo-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                tipoSelecionado = btn.dataset.tipo;
+            };
+        });
+
+        /* =========================================================
+           AUTENTICAÇÃO
+           ========================================================= */
+        function fazerLogin() {
+            const email = document.getElementById('login-email').value.trim();
+            const senha = document.getElementById('login-senha').value;
+            const msg = document.getElementById('mensagem');
+
+            if (!email || !senha) { msg.textContent = 'Preencha todos os campos!'; return; }
+
+            const usuarios = DB.get('usuarios');
+            const user = usuarios.find(u => u.email === email && u.senha === senha);
+
+            if (!user) { msg.textContent = 'Email ou senha incorretos!'; return; }
+            if (user.tipo !== tipoSelecionado) {
+                msg.textContent = `Este usuário não é ${tipoSelecionado}!`;
+                return;
+            }
+
+            localStorage.setItem('usuarioLogado', JSON.stringify(user));
+            msg.textContent = '';
+            entrarNoSistema(user);
+        }
+
+        function fazerCadastro() {
+            const nome = document.getElementById('cad-nome').value.trim();
+            const email = document.getElementById('cad-email').value.trim();
+            const senha = document.getElementById('cad-senha').value;
+            const msg = document.getElementById('msg-cadastro');
+
+            if (!nome || !email || !senha) { msg.textContent = 'Preencha todos os campos!'; return; }
+            if (senha.length < 6) { msg.textContent = 'Senha deve ter ao menos 6 caracteres!'; return; }
+
+            const usuarios = DB.get('usuarios');
+            if (usuarios.some(u => u.email === email)) { msg.textContent = 'Email já cadastrado!'; return; }
+
+            usuarios.push({ id: Date.now(), nome, email, senha, tipo: 'cliente' });
+            DB.set('usuarios', usuarios);
+
+            msg.style.color = 'green';
+            msg.textContent = 'Cadastro realizado! Redirecionando...';
+            setTimeout(() => { mostrarLogin(); document.getElementById('login-email').value = email; msg.textContent = ''; msg.style.color = '#e91e63'; }, 1200);
+        }
+
+        function entrarNoSistema(user) {
+            esconderTudo();
+            if (user.tipo === 'admin') {
+                document.getElementById('nome-admin').textContent = '👋 ' + user.nome;
+                document.getElementById('tela-admin').classList.remove('oculto');
+                renderizarAdmin();
+            } else {
+                document.getElementById('nome-usuario').textContent = '👋 ' + user.nome;
+                document.getElementById('tela-loja').classList.remove('oculto');
+                atualizarCategorias();
+                renderizarLoja();
+                atualizarQtdCarrinho();
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('usuarioLogado');
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-senha').value = '';
+            document.getElementById('mensagem').textContent = '';
+            mostrarLogin();
+        }
+
+        const usuarioAtual = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
+        if (usuarioAtual) entrarNoSistema(usuarioAtual);
+
+        /* =========================================================
+           TOAST
+           ========================================================= */
+        function toast(mensagem, cor = '#4caf50') {
+            const t = document.createElement('div');
+            t.className = 'toast';
+            t.style.background = cor;
+            t.textContent = mensagem;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 2500);
+        }
+
+        /* =========================================================
+           LOJA
+           ========================================================= */
+        function atualizarCategorias() {
+            const produtos = DB.get('produtos');
+            const categorias = [...new Set(produtos.map(p => p.categoria))].sort();
+            const select = document.getElementById('filtro-categoria');
+            const valorAtual = select.value;
+            select.innerHTML = '<option value="">Todas as categorias</option>' +
+                categorias.map(c => `<option value="${c}">${c}</option>`).join('');
+            select.value = valorAtual;
+        }
+
+        function renderizarLoja() {
+            const busca = document.getElementById('busca')?.value.toLowerCase() || '';
+            const categoria = document.getElementById('filtro-categoria')?.value || '';
+            const ordem = document.getElementById('filtro-ordem')?.value || 'padrao';
+
+            let produtos = DB.get('produtos');
+
+            // Filtros
+            if (busca) produtos = produtos.filter(p =>
+                p.nome.toLowerCase().includes(busca) || p.descricao.toLowerCase().includes(busca)
+            );
+            if (categoria) produtos = produtos.filter(p => p.categoria === categoria);
+
+            // Ordenação
+            if (ordem === 'menor') produtos.sort((a, b) => a.preco - b.preco);
+            if (ordem === 'maior') produtos.sort((a, b) => b.preco - a.preco);
+            if (ordem === 'nome') produtos.sort((a, b) => a.nome.localeCompare(b.nome));
+
+            const container = document.getElementById('produtos-loja');
+            if (produtos.length === 0) {
+                container.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:40px;color:#888;">Nenhum produto encontrado.</p>';
+                return;
+            }
+
+            container.innerHTML = produtos.map(p => `
+    <div class="card-produto">
+      <span class="badge-categoria">${p.categoria}</span>
+      <img src="${p.imagem || 'https://via.placeholder.com/400x300?text=Sem+Imagem'}" alt="${p.nome}" onerror="this.src='https://via.placeholder.com/400x300?text=Sem+Imagem'">
+      <h3>${p.nome}</h3>
+      <p class="desc">${p.descricao || ''}</p>
+      <div class="estoque-info">Estoque: ${p.estoque} un.</div>
+      <p class="preco">R$ ${Number(p.preco).toFixed(2)}</p>
+      <div class="controles">
+        <button onclick="mudarQtdCard(${p.id}, -1)">−</button>
+        <input type="number" id="qtd-${p.id}" value="1" min="1" max="${p.estoque}">
+        <button onclick="mudarQtdCard(${p.id}, 1)">+</button>
+      </div>
+      <button class="btn-add" onclick="addCarrinho(${p.id})" ${p.estoque === 0 ? 'disabled style="background:#ccc;"' : ''}>
+        ${p.estoque === 0 ? 'Sem Estoque' : '🛒 Adicionar'}
+      </button>
+    </div>
+  `).join('');
+        }
+
+        function mudarQtdCard(id, delta) {
+            const input = document.getElementById(`qtd-${id}`);
+            const produtos = DB.get('produtos');
+            const p = produtos.find(x => x.id === id);
+            let valor = parseInt(input.value) || 1;
+            valor += delta;
+            if (valor < 1) valor = 1;
+            if (valor > p.estoque) valor = p.estoque;
+            input.value = valor;
+        }
+
+        function addCarrinho(idProduto) {
+            const produtos = DB.get('produtos');
+            const produto = produtos.find(p => p.id === idProduto);
+            if (!produto) return;
+
+            const qtd = parseInt(document.getElementById(`qtd-${idProduto}`).value) || 1;
+
+            const carrinho = DB.get('carrinho');
+            const existente = carrinho.find(item => item.id === idProduto);
+
+            if (existente) {
+                existente.quantidade += qtd;
+                if (existente.quantidade > produto.estoque) existente.quantidade = produto.estoque;
+            } else {
+                carrinho.push({ id: idProduto, quantidade: qtd });
+            }
+
+            DB.set('carrinho', carrinho);
+            atualizarQtdCarrinho();
+            toast(`✅ ${qtd}x "${produto.nome}" adicionado!`);
+            document.getElementById(`qtd-${idProduto}`).value = 1;
+        }
+
+        function atualizarQtdCarrinho() {
+            const carrinho = DB.get('carrinho');
+            const totalItens = carrinho.reduce((s, i) => s + i.quantidade, 0);
+            const el = document.getElementById('qtd-carrinho');
+            if (el) el.textContent = totalItens;
+        }
+
+        /* =========================================================
+           CARRINHO
+           ========================================================= */
+        function abrirCarrinho() {
+            const carrinho = DB.get('carrinho');
+            const produtos = DB.get('produtos');
+
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+
+            if (carrinho.length === 0) {
+                modal.innerHTML = `
+      <div class="modal-content">
+        <h2>🛒 Meu Carrinho</h2>
+        <p style="text-align:center;padding:40px;color:#888;font-size:16px;">Seu carrinho está vazio!</p>
+        <button class="fechar" onclick="this.closest('.modal').remove()">Voltar às compras</button>
+      </div>
+    `;
+            } else {
+                const itensCompletos = carrinho.map(item => {
+                    const p = produtos.find(x => x.id === item.id);
+                    return { ...p, quantidade: item.quantidade, subtotal: p.preco * item.quantidade };
+                });
+                const totalGeral = itensCompletos.reduce((s, i) => s + i.subtotal, 0);
+                const totalPecas = itensCompletos.reduce((s, i) => s + i.quantidade, 0);
+
+                modal.innerHTML = `
+      <div class="modal-content">
+        <h2>🛒 Meu Carrinho (${totalPecas} ${totalPecas === 1 ? 'peça' : 'peças'})</h2>
+        ${itensCompletos.map(item => `
+          <div class="item-carrinho">
+            <img src="${item.imagem || 'https://via.placeholder.com/60'}" onerror="this.src='https://via.placeholder.com/60'">
+            <div class="info">
+              <strong>${item.nome}</strong>
+              <small>R$ ${Number(item.preco).toFixed(2)} cada</small>
+            </div>
+            <div class="controles-carrinho">
+              <button onclick="alterarQtdCarrinho(${item.id}, -1)">−</button>
+              <span>${item.quantidade}</span>
+              <button onclick="alterarQtdCarrinho(${item.id}, 1)">+</button>
+            </div>
+            <div class="subtotal">R$ ${item.subtotal.toFixed(2)}</div>
+            <button class="btn-remover" onclick="removerDoCarrinho(${item.id})">🗑️</button>
+          </div>
+        `).join('')}
+        <div class="resumo-carrinho">
+          <span>Total (${totalPecas} itens):</span>
+          <span>R$ ${totalGeral.toFixed(2)}</span>
+        </div>
+        <button class="finalizar" onclick="finalizarCompra()">✅ Finalizar Compra</button>
+        <button class="fechar" onclick="this.closest('.modal').remove()">Continuar Comprando</button>
+      </div>
+    `;
+            }
+
+            document.body.appendChild(modal);
+        }
+
+        function alterarQtdCarrinho(id, delta) {
+            const carrinho = DB.get('carrinho');
+            const produtos = DB.get('produtos');
+            const item = carrinho.find(i => i.id === id);
+            const produto = produtos.find(p => p.id === id);
+            if (!item) return;
+
+            item.quantidade += delta;
+
+            if (item.quantidade > produto.estoque) {
+                item.quantidade = produto.estoque;
+                toast('⚠️ Estoque máximo atingido!', '#ff9800');
+            }
+            if (item.quantidade < 1) {
+                removerDoCarrinho(id);
+                return;
+            }
+
+            DB.set('carrinho', carrinho);
+            atualizarQtdCarrinho();
+            document.querySelector('.modal')?.remove();
+            abrirCarrinho();
+        }
+
+        function removerDoCarrinho(id) {
+            let carrinho = DB.get('carrinho');
+            carrinho = carrinho.filter(i => i.id !== id);
+            DB.set('carrinho', carrinho);
+            atualizarQtdCarrinho();
+            document.querySelector('.modal')?.remove();
+            abrirCarrinho();
+        }
+
+        function finalizarCompra() {
+            const carrinho = DB.get('carrinho');
+            const produtos = DB.get('produtos');
+            if (carrinho.length === 0) return;
+
+            const itensCompletos = carrinho.map(item => {
+                const p = produtos.find(x => x.id === item.id);
+                return { ...p, quantidade: item.quantidade, subtotal: p.preco * item.quantidade };
+            });
+            const totalGeral = itensCompletos.reduce((s, i) => s + i.subtotal, 0);
+            const totalPecas = itensCompletos.reduce((s, i) => s + i.quantidade, 0);
+            const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
+
+            // Baixa de estoque
+            carrinho.forEach(item => {
+                const p = produtos.find(x => x.id === item.id);
+                if (p) p.estoque -= item.quantidade;
+            });
+            DB.set('produtos', produtos);
+
+            // Salva pedido
+            const pedidos = DB.get('pedidos');
+            pedidos.push({
+                id: Date.now(),
+                usuario: usuario.nome,
+                email: usuario.email,
+                itens: itensCompletos.map(i => ({ nome: i.nome, qtd: i.quantidade, subtotal: i.subtotal })),
+                totalPecas: totalPecas,
+                total: totalGeral,
+                data: new Date().toLocaleString('pt-BR')
+            });
+            DB.set('pedidos', pedidos);
+
+            // Limpa carrinho
+            DB.set('carrinho', []);
+            atualizarQtdCarrinho();
+            document.querySelector('.modal')?.remove();
+
+            toast(`✅ Compra finalizada! ${totalPecas} peças - R$ ${totalGeral.toFixed(2)}`);
+
+            setTimeout(() => {
+                alert(`🎉 Compra realizada com sucesso!\n\n📦 ${totalPecas} peça(s)\n💰 Total: R$ ${totalGeral.toFixed(2)}\n\nObrigado pela preferência!`);
+                renderizarLoja();
+            }, 300);
+        }
+
+        /* =========================================================
+           ADMIN
+           ========================================================= */
+        function renderizarAdmin() {
+            const produtos = DB.get('produtos');
+            const usuarios = DB.get('usuarios');
+            const pedidos = DB.get('pedidos');
+
+            document.querySelector('#tabela-produtos tbody').innerHTML = produtos.map(p => `
+    <tr>
+      <td>${p.id}</td>
+      <td>${p.nome}</td>
+      <td>${p.categoria}</td>
+      <td>R$ ${Number(p.preco).toFixed(2)}</td>
+      <td>${p.estoque}</td>
+      <td>
+        <button class="btn-edit" onclick="editarProduto(${p.id})">Editar</button>
+        <button class="btn-del" onclick="excluirProduto(${p.id})">Excluir</button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="6" style="text-align:center;color:#888;">Nenhum produto</td></tr>';
+
+            document.querySelector('#tabela-usuarios tbody').innerHTML = usuarios.map(u => `
+    <tr>
+      <td>${u.id}</td>
+      <td>${u.nome}</td>
+      <td>${u.email}</td>
+      <td>${u.tipo === 'admin' ? '🔧 Admin' : '👕 Cliente'}</td>
+    </tr>
+  `).join('');
+
+            document.querySelector('#tabela-pedidos tbody').innerHTML = pedidos.length === 0
+                ? '<tr><td colspan="4" style="text-align:center;color:#888;">Nenhum pedido ainda</td></tr>'
+                : pedidos.reverse().map(p => `
+        <tr>
+          <td>${p.data}</td>
+          <td>${p.usuario}</td>
+          <td>${p.totalPecas} peças</td>
+          <td>R$ ${p.total.toFixed(2)}</td>
+        </tr>
+      `).join('');
+        }
+
+        function cadastrarProduto() {
+            const nome = document.getElementById('prod-nome').value.trim();
+            const descricao = document.getElementById('prod-desc').value.trim();
+            const preco = parseFloat(document.getElementById('prod-preco').value);
+            const estoque = parseInt(document.getElementById('prod-estoque').value) || 0;
+            const categoria = document.getElementById('prod-categoria').value.trim();
+            const imagem = document.getElementById('prod-imagem').value.trim();
+
+            if (!nome || isNaN(preco) || preco <= 0) {
+                alert('Preencha nome e preço válido!');
+                return;
+            }
+
+            const produtos = DB.get('produtos');
+            produtos.push({ id: Date.now(), nome, descricao, preco, estoque, categoria: categoria || 'Outros', imagem });
+            DB.set('produtos', produtos);
+
+            ['prod-nome', 'prod-desc', 'prod-preco', 'prod-estoque', 'prod-categoria', 'prod-imagem']
+                .forEach(id => document.getElementById(id).value = '');
+
+            renderizarAdmin();
+            toast('✅ Produto cadastrado!');
+        }
+
+        function excluirProduto(id) {
+            if (!confirm('Excluir este produto?')) return;
+            let produtos = DB.get('produtos');
+            produtos = produtos.filter(p => p.id !== id);
+            DB.set('produtos', produtos);
+            renderizarAdmin();
+            toast('🗑️ Produto removido', '#f44336');
+        }
+
+        function editarProduto(id) {
+            const produtos = DB.get('produtos');
+            const p = produtos.find(x => x.id === id);
+            if (!p) return;
+
+            const novoNome = prompt('Nome:', p.nome);
+            if (novoNome === null) return;
+            const novoPreco = prompt('Preço:', p.preco);
+            if (novoPreco === null) return;
+            const novoEstoque = prompt('Estoque:', p.estoque);
+            if (novoEstoque === null) return;
+
+            p.nome = novoNome.trim() || p.nome;
+            p.preco = parseFloat(novoPreco) || p.preco;
+            p.estoque = parseInt(novoEstoque) || 0;
+
+            DB.set('produtos', produtos);
+            renderizarAdmin();
+            toast('✅ Produto atualizado!');
+        }
+    </script>
+</body>
+
+</html>
